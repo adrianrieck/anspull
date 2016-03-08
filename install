@@ -8,6 +8,9 @@ fi
 
 apt-get update
 apt-get -y install ansible git
+rm -rf /opt/anspull
+git clone https://github.com/adrianrieck/anspull.git /opt/anspull
+ansible-pull pbook.yml -d /opt/anspull -U https://github.com/adrianrieck/anspull.git  -i /opt/anspull/inv.ini
 
 
 
