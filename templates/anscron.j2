@@ -1,2 +1,2 @@
 # Cron job to git clone/pull a repo and then run locally
-{{ cron_schedule }} {{ cron_user }} ansible-pull {{ playbook }} -d {{ repo_dir }} -U {{ repo_url }}  -i {{ repo_url }}/inv.ini >>{{ logfile }} 2>&1
+{{ cron_schedule }} {{ cron_user }} ansible-pull {{ playbook }} -d {{ repo_dir }} -U {{ repo_url }}  -i {{ repo_dir }}/inv.ini >>{{ logfile }} 2>&1
