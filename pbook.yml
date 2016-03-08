@@ -7,18 +7,12 @@
   sudo_user: root
   
   vars:
-  
-  playbook: pbook.yml
-
-  cron_schedule: '7 * * * *'
-
-  cron_user: root
-
-  logfile: /var/log/ansible-pull.log
-
-  repo_dir: /opt/anspull
-
-  repo_url: https://github.com/adrianrieck/anspull.git
+    playbook: pbook.yml
+    cron_schedule: '7 * * * *'
+    cron_user: root
+    logfile: /var/log/ansible-pull.log
+    repo_dir: /opt/anspull
+    repo_url: https://github.com/adrianrieck/anspull.git
 
 
   tasks:
@@ -28,5 +22,11 @@
   - name: Ensure user adminuser is present.
     user: name=adminuser state=present group=root
 
-  - name: Placing key
+  - name: Add Ansible Server Public Key to user adminuser
     authorized_key: user=adminuser key="{{ lookup('file', './files/ansible-server.pub') }}"
+    
+  - name: Create crontab entry to repeat ansible pull every hour
+    template: src=templates/anscron.j2 dest=/etc/cron.d/ansible-pull owner=root group=root mode=0644
+
+  - name: Create logrotate entry for ansible-pull.log
+    template: src=templates/anslogr.j2 dest=/etc/logrotate.d/ansible-pull owner=root group=root mode=0644
