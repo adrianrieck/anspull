@@ -16,6 +16,12 @@
 
 
   tasks:
+  - name: Get RPI Serial
+    shell: awk '/Serial/{print $3}' /proc/cpuinfo
+    register: rpisn
+  
+  - debug: msg="RPI Serial {{ rpisn.stdout }}"
+
   - name: Ensure vim is installed.
     apt: pkg=vim state=present update_cache=yes
 
