@@ -1,7 +1,7 @@
 ---
 
 # Directives for all children nodes
-- hosts: 127.0.0.1
+- hosts: pi
   user: pi
   sudo: True
   sudo_user: root
