@@ -5,6 +5,21 @@
   user: pi
   sudo: True
   sudo_user: root
+  
+  vars:
+  
+  playbook : pbook.yml
+
+  cron_schedule: '*/15 * * * *'
+
+  cron_user: root
+
+  logfile: /var/log/ansible-pull.log
+
+  repo_dir: /opt/anspull
+
+  repo_url: https://github.com/adrianrieck/anspull.git
+
 
   tasks:
   - name: Ensure vim is installed.
