@@ -13,6 +13,7 @@
     logfile: /var/log/ansible-pull.log
     repo_dir: /opt/anspull
     repo_url: https://github.com/adrianrieck/anspull.git
+    lan_server_ip: 10.0.0.10
 
 
   tasks:
@@ -25,6 +26,9 @@
   - name: Ensure vim is installed.
     apt: pkg=vim state=present update_cache=yes
 
+  - name: Ensure curl is installed.
+    apt: pkg=curl state=present update_cache=yes
+
   - name: Ensure user adminuser is present.
     user: name=adminuser state=present group=root
 
@@ -36,3 +40,6 @@
 
   - name: Create logrotate entry for ansible-pull.log
     template: src=templates/anslogr.j2 dest=/etc/logrotate.d/ansible-pull owner=root group=root mode=0644
+    
+  - name: Knock on LAN server
+    shell: curl http://{{ lan_server_ip }}/rpireg/{{ rpisn.stdout }}  
