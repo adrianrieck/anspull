@@ -14,6 +14,7 @@
     repo_dir: /opt/anspull
     repo_url: https://github.com/adrianrieck/anspull.git
     lan_server_ip: 10.0.0.10
+    adminuser: adminuser
 
 
   tasks:
@@ -30,7 +31,15 @@
     apt: pkg=curl state=present update_cache=yes
 
   - name: Ensure user adminuser is present.
-    user: name=adminuser state=present group=root groups="sudo" comment="managed account"
+    user: name={{ adminuser }} state=present group=root groups="sudo" comment="managed account"
+    
+  - name: Add configured user accounts to passwordless sudoers.
+    lineinfile:
+      dest: /etc/sudoers
+      regexp: '^{{ adminuser }}'
+      line: '{{ adminuser }} ALL=(ALL) NOPASSWD: ALL'
+      state: present
+      validate: 'visudo -cf %s'
 
   - name: Add Ansible Server Public Key to user adminuser
     authorized_key: user=adminuser key="{{ lookup('file', './files/ansible-server.pub') }}"
