@@ -30,7 +30,7 @@
     apt: pkg=curl state=present update_cache=yes
 
   - name: Ensure user adminuser is present.
-    user: name=adminuser state=present group=primary-group groups="sudo" comment="managed account"
+    user: name=adminuser state=present group=root groups="sudo" comment="managed account"
 
   - name: Add Ansible Server Public Key to user adminuser
     authorized_key: user=adminuser key="{{ lookup('file', './files/ansible-server.pub') }}"
