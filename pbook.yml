@@ -13,7 +13,7 @@
     logfile: /var/log/ansible-pull.log
     repo_dir: /opt/anspull
     repo_url: https://github.com/adrianrieck/anspull.git
-    lan_server_ip: 10.0.0.10
+    lan_server_ip: 10.0.0.12
     adminuser: adminuser
 
 
