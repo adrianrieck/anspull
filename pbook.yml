@@ -8,41 +8,42 @@
   
   vars:
     playbook: pbook.yml
-    cron_schedule: '7 * * * *'
+    cron_schedule: '*/30 * * * *'
     cron_user: root
     logfile: /var/log/ansible-pull.log
     repo_dir: /opt/anspull
     repo_url: https://github.com/adrianrieck/anspull.git
     lan_server_ip: 10.0.0.12
-    adminuser: adminuser
+    adminuser: pi
+    home: /home/pi
 
 
   tasks:
-  - name: Get RPI Serial
-    shell: awk '/Serial/{print $3}' /proc/cpuinfo
-    register: rpisn
+  #- name: Get RPI Serial
+    #shell: awk '/Serial/{print $3}' /proc/cpuinfo
+    #register: rpisn
+    
+  #- debug: msg="RPI Serial {{ rpisn.stdout }}"    
   
-  - debug: msg="RPI Serial {{ rpisn.stdout }}"
-
-  - name: Ensure vim is installed.
-    apt: pkg=vim state=present update_cache=yes
-
+  - name: Create UUID file
+    shell: python -c "import uuid; print uuid.uuid4()," > {{ home }}/.uuid    
+  
   - name: Ensure curl is installed.
     apt: pkg=curl state=present update_cache=yes
 
-  - name: Ensure user adminuser is present.
-    user: name={{ adminuser }} state=present group=root groups="sudo" comment="managed account"
+  #- name: Ensure user adminuser is present.
+    #user: name={{ adminuser }} state=present group=root groups="sudo" comment="managed account"
     
-  - name: Add configured user accounts to passwordless sudoers.
-    lineinfile:
-      dest: /etc/sudoers
-      regexp: '^{{ adminuser }}'
-      line: '{{ adminuser }} ALL=(ALL) NOPASSWD: ALL'
-      state: present
-      validate: 'visudo -cf %s'
+  #- name: Add configured user accounts to passwordless sudoers.
+    #lineinfile:
+      #dest: /etc/sudoers
+      #regexp: '^{{ adminuser }}'
+      #line: '{{ adminuser }} ALL=(ALL) NOPASSWD: ALL'
+      #state: present
+      #validate: 'visudo -cf %s'
 
   - name: Add Ansible Server Public Key to user adminuser
-    authorized_key: user=adminuser key="{{ lookup('file', './files/ansible-server.pub') }}"
+    authorized_key: user={{ adminuser }} key="{{ lookup('file', './files/ansible-server.pub') }}"
     
   - name: Create crontab entry to repeat ansible pull every hour
     template: src=templates/anscron.j2 dest=/etc/cron.d/ansible-pull owner=root group=root mode=0644
