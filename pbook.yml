@@ -58,4 +58,4 @@
     template: src=templates/anslogr.j2 dest=/etc/logrotate.d/ansible-pull owner=root group=root mode=0644
     
   - name: Knock on LAN server
-    command: curl http://{{ lan_server_ip }}/rpireg/sn-{{ rpisn.stdout }} creates=/opt/anspull/knock.done
+    command: curl http://{{ lan_server_ip }}/rpireg/sn-{{ rpiuuid.stdout }} creates=/opt/anspull/knock.done
