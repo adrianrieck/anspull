@@ -26,7 +26,13 @@
   #- debug: msg="RPI Serial {{ rpisn.stdout }}"    
   
   - name: Create UUID file
-    shell: python -c "import uuid; print uuid.uuid4()," > {{ home }}/.uuid    
+    shell: python -c "import uuid; print uuid.uuid4()," > {{ home }}/.uuid
+    
+  - name: Get RPI UUID
+    shell: cat {{ home }}/.uuid
+    register: rpiuuid
+
+  - debug: msg="RPI UUID {{ rpiuuid.stdout }}"    
   
   - name: Ensure curl is installed.
     apt: pkg=curl state=present update_cache=yes
