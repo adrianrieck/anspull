@@ -1,5 +1,8 @@
 #!/bin/bash
 
+repo_url='https://github.com/adrianrieck/anspull.git'
+repo_dir='/opt/anspull'
+
 if [ "$(id -u)" != "0" ]
 then
      echo "This script must be run as root" 1>&2
@@ -8,10 +11,6 @@ fi
 
 apt-get update
 apt-get -y install ansible git
-rm -rf /opt/anspull
-git clone https://github.com/adrianrieck/anspull.git /opt/anspull
-ansible-pull pbook.yml -d /opt/anspull -C master -U https://github.com/adrianrieck/anspull.git  -i /opt/anspull/inv.ini
-
-
-
-
+rm -rf $repo_dir
+git clone $repo_url $repo_dir
+ansible-pull pbook.yml -d $repo_dir -C master -U $repo_url  -i $repo_dir/inv.ini
