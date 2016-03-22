@@ -26,7 +26,7 @@
   #- debug: msg="RPI Serial {{ rpisn.stdout }}"    
   
   - name: Create UUID file
-    shell: python -c "import uuid; print uuid.uuid4()," > {{ home }}/.uuid creates="{{ home }}"/.uuid
+    command: python -c "import uuid; print uuid.uuid4()," > {{ home }}/.uuid creates="{{ home }}"/.uuid
     
     
   - name: Get RPI UUID
